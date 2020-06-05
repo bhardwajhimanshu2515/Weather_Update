@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="cssforindex.css">
+</head>
+
+<body>
+    <div id="navbar">
+        <div id="logo">
+            Weather App
+        </div>
+    </div>
+    <div id="container">
+        <form>
+            <div id="searchform">
+                <input type="text" id="searchbox" placeholder="Country Name" class="textboxes">
+                <button id="submit" class="textboxes">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div id="output">
+
+    </div>
+    <div id="bottom">
+        <div id="left">
+            All rights are reserved by Himanshu Bhardwaj.
+        </div>
+    </div>
+</body>
+<script>
+    var serachele = document.getElementById('searchbox');
+        var submitbutton = document.getElementById('submit');
+        var data = [];
+        var output = document.getElementById('output');
+        submitbutton.addEventListener('click', function (e) {
+            e.preventDefault();
+            var search = serachele.value;
+            var rawurl = 'http://api.weatherstack.com/current?access_key=d8fefab56305f5a343b0eab4f837fec1&query='+search;
+            var url = rawurl;
+            var promisedresponse = fetch(url);
+            promisedresponse.then(response => {
+                if (response.status == 200) {
+                    var promiseddata = response.json();
+                    promiseddata.then(apidata => {
+                        var datafromserver = apidata;
+                        data = datafromserver;
+                        renderlist();
+                    });
+                }
+            });
+        });
+        //renderlist here
+        function renderlist(){
+        var res = "";
+        var location=data.location.name;
+        var temperature=data.current.temperature;
+        var windspeed=data.current.wind_speed;
+        var winddegree=data.current.wind_degree;
+        var windimg=data.current.weather_descriptions[0];
+        var winddirecrtion=data.current.wind_dir;
+        var humididty=data.current.humidity;
+        var visibility=data.current.visibility;
+            for (var i = 0; i < 1; i++) {
+                var html = '\
+    <div id="c1">\
+    <div>\
+    <div class="titles">Location</div>\
+    <div id="country" class="data">'+location + '</div>\
+    </div>\
+    <div>\
+    <div class="titles">Temperature</div>\
+    <div id="country" class="data">'+temperature + '</div>\
+    </div>\
+    <div>\
+    <div class="titles">Weather</div>\
+    <div id="country" class="data">'+windimg +'</div>\
+    </div>\
+    <div>\
+    <div class="titles">Wind Speed</div>\
+    <div id="country" class="data">'+windspeed+ '</div>\
+    </div>\
+    </div>\
+    <div id="c2">\
+    <div>\
+    <div class="titles">Wind Degree</div>\
+    <div id="country" class="data">'+winddegree + '</div>\
+    </div>\
+    <div>\
+    <div class="titles">Wind Direction</div>\
+    <div id="country" class="data">'+winddirecrtion + '</div>\
+    </div>\
+    <div>\
+    <div class="titles">Humidity</div>\
+    <div id="country" class="data">'+humididty + '</div>\
+    </div>\
+    <div>\
+    <div class="titles">Visibility</div>\
+    <div id="country" class="data">'+visibility+ '</div>\
+    </div>\
+    </div>';
+                res += html;
+            }
+            output.innerHTML = res;
+        };
+</script>
+
+</html>
